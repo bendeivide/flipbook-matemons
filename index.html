@@ -19,8 +19,9 @@
             font-family: Arial, sans-serif;
         }
         #flipbook {
-            width: 600px; /* Largura do livro */
-            height: 400px; /* Altura do livro */
+            width: 60vw; /* Largura do livro */
+            height: 80vh; /* Altura do livro */
+            margin-bottom: 20px; /* Espaço entre o livro e o slider */
         }
         .hard {
             background: #333;
@@ -35,19 +36,56 @@
             height: 100%; /* Ajusta a altura da imagem para 100% da capa */
             object-fit: cover; /* A imagem vai cobrir a capa sem distorcer */
         }
+        
         .page {
             background: #fff;
             color: #000;
-            text-align: center;
+            text-align: start;
             overflow: hidden; /* Esconde o excesso de imagem */
         }
+        
+       /* Título na parte superior da página */
+        #page-title {
+            text-align: start;
+            font-size: 12px;
+            color: #333;
+            margin-top: 10px;
+            width: 100%;
+        }
+        
         .page img {
             width: 100%; /* Ajusta a largura da imagem para 100% da página */
             height: 100%; /* Ajusta a altura da imagem para 100% da página */
             object-fit: cover; /* Preenche a página sem distorcer, mas pode cortar a imagem */
         }
+        
+        .page .page-text {
+            position: absolute;
+            top: 20px; /* Ajuste a posição do texto para a parte superior */
+            left: 20px;
+            right: 20px;
+            color: #333;
+            font-size: 24px;
+            background-color: rgba(255, 255, 255, 0.7); /* Fundo semitransparente */
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        /* Barra de slider (progresso) */
+        #page-slider {
+            position: absolute;
+            bottom: 20px; /* Coloca o slider 20px acima da parte inferior da tela */
+            width: 80%; /* Largura do slider */
+            margin: 0;
+            left: 50%;
+            transform: translateX(-50%); /* Centraliza o slider horizontalmente */
+        }
+
     </style>
 </head>
+
+
+
 <body>
 
 <div id="flipbook">
@@ -83,22 +121,46 @@
     <div class="page"><img src="./paginas/29.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
     <div class="hard"><img src="./paginas/30.png" alt="Contra-Capa"></div> <!-- Substitua pela sua imagem da contra-capa -->
 </div>
+</br>
+
+<!-- Barra de progresso (slider) na parte inferior -->
+<input type="range" id="page-slider" min="1" max="30" value="1" step="1">
+
 
 <script>
     $(document).ready(function() {
         $("#flipbook").turn({
-            display: "double",
-            width: 800,
-            height: 600,
+            width: $(window).width() * 0.6,  // Largura do livro: 80% da largura da janela
+            height: $(window).height() * 0.8, // Altura do livro: 70% da altura da janela
             autoCenter: true,
-            zoom: 2
         });
-        // Configura o zoom ao dar zoom in/out
-        // Para zoom programático
-        $("#flipbook").turn("zoom", 2);  // Aplique zoom 2x
+        // Configura a quantidade total de páginas
+        var totalPages = $("#flipbook").turn("pages");
+        $("#total-pages").text(totalPages);
+
+        // Atualiza a página atual no contador de páginas
+        $("#flipbook").on("turning", function(event, page, view) {
+            $("#current-page").text(page);
+            // Atualiza o valor do slider conforme a página atual
+            $("#page-slider").val(page);
+        });
+
+        // Atualiza o livro para a página selecionada ao mover o slider
+        $("#page-slider").on("input", function() {
+            var selectedPage = $(this).val();
+            $("#flipbook").turn("page", selectedPage);
+        });
+        
+        // Ajusta o livro quando a janela for redimensionada
+        $(window).resize(function() {
+            $("#flipbook").turn("size", $(window).width() * 0.5, $(window).height() * 0.7);
+        });
+        
     });
     
 </script>
+
+
 
 </body>
 </html>
