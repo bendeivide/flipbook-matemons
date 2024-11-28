@@ -209,6 +209,18 @@
 
         // Define o tamanho inicial do livro
         resizeFlipbook(zoomLevel);
+        
+        // Atualiza a página atual no contador de páginas
+        $("#flipbook").on("turning", function(event, page, view) {
+            // Atualiza o valor do slider conforme a página atual
+            $("#page-slider").val(page);
+        });
+
+        // Atualiza o livro para a página selecionada ao mover o slider
+        $("#page-slider").on("input", function() {
+            var selectedPage = $(this).val();
+            $("#flipbook").turn("page", selectedPage);
+        });
     });
     
 </script>
