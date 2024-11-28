@@ -128,19 +128,35 @@
 
 
 <script>
-    $(document).ready(function() {
+   $(document).ready(function() {
+        // Ajusta o livro para se adaptar à largura e altura da janela
+        function resizeFlipbook() {
+            var windowWidth = $(window).width();
+            var windowHeight = $(window).height();
+            
+            // Mantém a proporção entre largura e altura do livro
+            var bookWidth = windowWidth * 0.5;
+            var bookHeight = (bookWidth / 1.4); // A proporção do livro (por exemplo, 1.4:1)
+            
+            // Aplica o tamanho calculado ao livro
+            $("#flipbook").turn("size", bookWidth, bookHeight);
+        }
+        
+        // Inicializa o livro
         $("#flipbook").turn({
-            width: $(window).width() * 0.5,  // Largura do livro: 80% da largura da janela
-            height: $(window).height() * 0.7, // Altura do livro: 70% da altura da janela
-            autoCenter: true,
+            autoCenter: true, // Centraliza o livro automaticamente
         });
-        // Configura a quantidade total de páginas
-        var totalPages = $("#flipbook").turn("pages");
-        $("#total-pages").text(totalPages);
 
+        // Redimensiona o livro quando a janela for redimensionada
+        $(window).resize(function() {
+            resizeFlipbook();
+        });
+        
+        // Inicializa o redimensionamento
+        resizeFlipbook();
+        
         // Atualiza a página atual no contador de páginas
         $("#flipbook").on("turning", function(event, page, view) {
-            $("#current-page").text(page);
             // Atualiza o valor do slider conforme a página atual
             $("#page-slider").val(page);
         });
@@ -150,12 +166,6 @@
             var selectedPage = $(this).val();
             $("#flipbook").turn("page", selectedPage);
         });
-        
-        // Ajusta o livro quando a janela for redimensionada
-        $(window).resize(function() {
-            $("#flipbook").turn("size", $(window).width() * 0.5, $(window).height() * 0.7);
-        });
-        
     });
     
 </script>
