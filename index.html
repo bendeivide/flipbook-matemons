@@ -80,6 +80,27 @@
             left: 50%;
             transform: translateX(-50%); /* Centraliza o slider horizontalmente */
         }
+        #fullscreen-btn, #zoom-in-btn, #zoom-out-btn {
+            position: absolute;
+            top: 10px;
+            background-color: rgba(0, 0, 0, 0.6);
+            color: white;
+            font-size: 16px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10;
+        }
+        #fullscreen-btn {
+            right: 10px;
+        }
+        #zoom-in-btn {
+            right: 115px;
+        }
+        #zoom-out-btn {
+            right: 200px;
+        }
 
     </style>
 </head>
@@ -87,6 +108,11 @@
 
 
 <body>
+
+<!-- Botões -->
+<button id="fullscreen-btn">Tela Cheia</button>
+<button id="zoom-in-btn">Zoom +</button>
+<button id="zoom-out-btn">Zoom -</button>
 
 <div id="flipbook">
     <!-- A Capa Agora é uma Imagem -->
@@ -128,44 +154,61 @@
 
 
 <script>
-   $(document).ready(function() {
-        // Ajusta o livro para se adaptar à largura e altura da janela
-        function resizeFlipbook() {
-            var windowWidth = $(window).width();
-            var windowHeight = $(window).height();
-            
-            // Mantém a proporção entre largura e altura do livro
-            var bookWidth = windowWidth * 0.5;
-            var bookHeight = (bookWidth / 1.4); // A proporção do livro (por exemplo, 1.4:1)
-            
-            // Aplica o tamanho calculado ao livro
-            $("#flipbook").turn("size", bookWidth, bookHeight);
-        }
-        
+    $(document).ready(function() {
+        const flipbook = $("#flipbook");
+        let zoomLevel = 1; // Zoom inicial (100%)
+        const aspectRatio = 1.4; // Proporção largura/altura do livro (exemplo: 3:2)
+
         // Inicializa o livro
-        $("#flipbook").turn({
-            autoCenter: true, // Centraliza o livro automaticamente
+        flipbook.turn({
+            autoCenter: true
         });
 
-        // Redimensiona o livro quando a janela for redimensionada
+        // Função para ajustar o tamanho do livro mantendo a proporção
+        function resizeFlipbook(zoom) {
+            const windowWidth = $(window).width();
+            const windowHeight = $(window).height();
+
+            // Calcula o novo tamanho do livro com base na proporção e no zoom
+            const bookWidth = Math.min(windowWidth * 0.6 * zoom, windowHeight * 0.6 * zoom * aspectRatio);
+            const bookHeight = bookWidth / aspectRatio;
+
+            // Aplica o novo tamanho ao livro
+            flipbook.turn("size", bookWidth, bookHeight);
+        }
+
+        // Botão de zoom in
+        $("#zoom-in-btn").click(function() {
+            if (zoomLevel < 2) { // Limite máximo de 200%
+                zoomLevel += 0.1;
+                resizeFlipbook(zoomLevel);
+            }
+        });
+
+        // Botão de zoom out
+        $("#zoom-out-btn").click(function() {
+            if (zoomLevel > 0.5) { // Limite mínimo de 50%
+                zoomLevel -= 0.1;
+                resizeFlipbook(zoomLevel);
+            }
+        });
+
+        // Botão de tela cheia
+        $("#fullscreen-btn").click(function() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        });
+
+        // Redimensiona o livro ao alterar o tamanho da janela
         $(window).resize(function() {
-            resizeFlipbook();
-        });
-        
-        // Inicializa o redimensionamento
-        resizeFlipbook();
-        
-        // Atualiza a página atual no contador de páginas
-        $("#flipbook").on("turning", function(event, page, view) {
-            // Atualiza o valor do slider conforme a página atual
-            $("#page-slider").val(page);
+            resizeFlipbook(zoomLevel);
         });
 
-        // Atualiza o livro para a página selecionada ao mover o slider
-        $("#page-slider").on("input", function() {
-            var selectedPage = $(this).val();
-            $("#flipbook").turn("page", selectedPage);
-        });
+        // Define o tamanho inicial do livro
+        resizeFlipbook(zoomLevel);
     });
     
 </script>
