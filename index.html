@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt_BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Matemática: Uma aventura através dos tempos</title>
+    <link rel="icon" type="image/x-icon" href="./paginas/1.png">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="./turn.min.js"></script>
+    
+    <style>
+        body {
+            background: #f0f0f0;
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+        }
+        #flipbook {
+            width: 600px; /* Largura do livro */
+            height: 400px; /* Altura do livro */
+        }
+        .hard {
+            background: #333;
+            color: white;
+            font-size: 24px;
+            line-height: 400px;
+            text-align: center;
+            overflow: hidden; /* Esconde o excesso de imagem */
+        }
+        .hard img {
+            width: 100%; /* Ajusta a largura da imagem para 100% da capa */
+            height: 100%; /* Ajusta a altura da imagem para 100% da capa */
+            object-fit: cover; /* A imagem vai cobrir a capa sem distorcer */
+        }
+        .page {
+            background: #fff;
+            color: #000;
+            text-align: center;
+            overflow: hidden; /* Esconde o excesso de imagem */
+        }
+        .page img {
+            width: 100%; /* Ajusta a largura da imagem para 100% da página */
+            height: 100%; /* Ajusta a altura da imagem para 100% da página */
+            object-fit: cover; /* Preenche a página sem distorcer, mas pode cortar a imagem */
+        }
+    </style>
+</head>
+<body>
+
+<div id="flipbook">
+    <!-- A Capa Agora é uma Imagem -->
+    <div class="hard"><img src="./paginas/1.png" alt="Capa do Livro"></div> <!-- Substitua "capa.jpg" pela sua imagem da capa -->
+    <div class="page"><img src="./paginas/2.png" alt="Página 1"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/3.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/4.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/5.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/6.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/7.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/8.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/9.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/10.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/11.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/12.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/13.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/14.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/15.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/16.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/17.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/18.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/19.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/20.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/21.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/22.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/23.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/24.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/25.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/26.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/27.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/28.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="page"><img src="./paginas/29.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
+    <div class="hard"><img src="./paginas/30.png" alt="Contra-Capa"></div> <!-- Substitua pela sua imagem da contra-capa -->
+</div>
+
+<script>
+    $(document).ready(function() {
+        $("#flipbook").turn({
+            display: "double",
+            width: 800,
+            height: 600,
+            autoCenter: true,
+            zoom: 2
+        });
+        // Configura o zoom ao dar zoom in/out
+        // Para zoom programático
+        $("#flipbook").turn("zoom", 2);  // Aplique zoom 2x
+    });
+    
+</script>
+
+</body>
+</html>
