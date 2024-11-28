@@ -101,7 +101,31 @@
         #zoom-out-btn {
             right: 200px;
         }
+        /* Lupa */
+        #zoom-lens {
+            position: absolute;
+            border: 2px solid #000;
+            border-radius: 50%;
+            cursor: none;
+            pointer-events: none;
+            width: 100px; /* Tamanho da lupa */
+            height: 100px;
+            background: rgba(255, 255, 255, 0.7);
+            display: none; /* Inicialmente oculta */
+        }
 
+        #zoom-result {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            width: 200px;
+            height: 200px;
+            border: 1px solid #000;
+            background: rgba(255, 255, 255, 0.5);
+            display: none;
+            background-size: 100%; /* A imagem será redimensionada */
+        }
+      
     </style>
 </head>
 
@@ -116,7 +140,7 @@
 
 <div id="flipbook">
     <!-- A Capa Agora é uma Imagem -->
-    <div class="hard"><img src="./paginas/1.png" alt="Capa do Livro"></div> <!-- Substitua "capa.jpg" pela sua imagem da capa -->
+    <div class="page"><img src="./paginas/1.png" alt="Capa do Livro"></div> <!-- Substitua "capa.jpg" pela sua imagem da capa -->
     <div class="page"><img src="./paginas/2.png" alt="Página 1"></div> <!-- Substitua pela sua imagem -->
     <div class="page"><img src="./paginas/3.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
     <div class="page"><img src="./paginas/4.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
@@ -145,20 +169,28 @@
     <div class="page"><img src="./paginas/27.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
     <div class="page"><img src="./paginas/28.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
     <div class="page"><img src="./paginas/29.png" alt="Página 2"></div> <!-- Substitua pela sua imagem -->
-    <div class="hard"><img src="./paginas/30.png" alt="Contra-Capa"></div> <!-- Substitua pela sua imagem da contra-capa -->
+    <div class="page"><img src="./paginas/30.png" alt="Contra-Capa"></div> <!-- Substitua pela sua imagem da contra-capa -->
 </div>
 </br>
+
 
 <!-- Barra de progresso (slider) na parte inferior -->
 <input type="range" id="page-slider" min="1" max="30" value="1" step="1">
 
+<div id="zoom-lens"></div> <!-- Lupa -->
+<div id="zoom-result"></div> <!-- Área de zoom -->
+
 
 <script>
+    
+
     $(document).ready(function() {
         const flipbook = $("#flipbook");
         let zoomLevel = 1; // Zoom inicial (100%)
         const aspectRatio = 1.4; // Proporção largura/altura do livro (exemplo: 3:2)
+        let isCtrlPressed = false; // Variável para verificar se a tecla Alt está pressionada
 
+ 
         // Inicializa o livro
         flipbook.turn({
             autoCenter: true
@@ -168,6 +200,7 @@
         function resizeFlipbook(zoom) {
             const windowWidth = $(window).width();
             const windowHeight = $(window).height();
+            
 
             // Calcula o novo tamanho do livro com base na proporção e no zoom
             const bookWidth = Math.min(windowWidth * 0.6 * zoom, windowHeight * 0.6 * zoom * aspectRatio);
@@ -221,6 +254,53 @@
             var selectedPage = $(this).val();
             $("#flipbook").turn("page", selectedPage);
         });
+    
+          // Detecta quando a tecla Ctrl é pressionada
+        $(document).keydown(function(event) {
+            if (event.ctrlKey) {
+                isCtrlPressed = true;
+            }
+        });
+
+        // Detecta quando a tecla Ctrl é liberada
+        $(document).keyup(function(event) {
+            if (!event.ctrlKey) {
+                isCtrlPressed = false;
+                $("#zoom-lens").hide(); // Esconde a lupa quando a tecla Ctrl não estiver pressionada
+                $("#zoom-result").hide(); // Esconde a área de zoom
+            }
+        });
+
+        // Função de zoom da lupa
+        $(document).mousemove(function(event) {
+            if (isCtrlPressed) {
+                var lens = $("#zoom-lens");
+                var result = $("#zoom-result");
+                var flipbookOffset = flipbook.offset();
+                
+                var x = event.pageX - flipbookOffset.left;
+                var y = event.pageY - flipbookOffset.top;
+
+                lens.show().css({
+                    left: x - lens.width() ,
+                    top: y - lens.height() 
+                });
+
+                // Pega a imagem da página atual
+                var currentPage = flipbook.turn("page");
+                var pageImage = flipbook.find(".page").eq(currentPage - 1).find("img").attr("src");
+
+                // Ajusta o resultado de zoom
+                result.show().css({
+                    left: x + 20,
+                    top: y + 20,
+                    backgroundPosition: `-${x * zoomLevel}px -${y * zoomLevel}px`,
+                    backgroundImage: `url(${pageImage})`,
+                    backgroundSize: `${400 * zoomLevel}% ${400 * zoomLevel}%`
+                });
+            }
+        });
+     
     });
     
 </script>
